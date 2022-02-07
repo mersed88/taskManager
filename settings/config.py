@@ -42,6 +42,7 @@ handler = None
 logger.info(f'''urlProfile = {URL_PROFILE}''')
 # task = yaml.load(requests.get(URL_PROFILE).text, Loader=yaml.Loader)
 
+
 try:
 
     user_postgres = os.getenv("USER_POSTGRES", "postgres")
