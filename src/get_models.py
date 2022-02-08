@@ -31,6 +31,7 @@ def get_task_by_worker(session: Session, id: Union[str, int]) -> ScheduleDaily:
         # print(type(result))
         return result.one()
 
+
     except Exception as e:
         logger.error(f"Failed get task \n {e}")
         return ScheduleDaily()
