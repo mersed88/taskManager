@@ -13,6 +13,7 @@ from sqlalchemy.schema import CreateSchema
 
 event.listen(Base.metadata, 'before_create', DDL(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}"))
 
+
 class Scenario(Base):
     __tablename__ = 'scenario'
     __table_args__ = {'schema': SCHEMA}
@@ -33,5 +34,3 @@ class ScheduleDaily(Base):
     sch_hour = Column(Integer)
     pickle_id = Column(Integer, ForeignKey(f'{SCHEMA}.scenario.id'))
     parent = relationship("Scenario", back_populates="children")
-
-

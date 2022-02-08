@@ -51,7 +51,7 @@ try:
     port_postgres = os.getenv("PORT_POSTGRES", "5432")
     db_postgres = os.getenv("DB_POSTGRES", "postgres")
 
-    engine_string = f'postgresql+asyncpg://{user_postgres}:{password_postgres}@{host_postgres}:{port_postgres}/{db_postgres}'
+    engine_string = f'postgresql://{user_postgres}:{password_postgres}@{host_postgres}:{port_postgres}/{db_postgres}'
     schema_db = os.getenv("SCHEMA", "taskManager")
 
     host = str("0.0.0.0")

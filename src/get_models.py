@@ -1,17 +1,16 @@
 # coding: utf-8
 
-import hashlib
+from datetime import datetime
+from typing import Union
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
 from models.tables import ScheduleDaily
 from settings.config import logger
-from datetime import datetime
 
 
-async def get_task_by_worker(session: Session, id: str) -> ScheduleDaily:
+async def get_task_by_worker(session: Session, id: Union[str, int]) -> ScheduleDaily:
     """
     Получение задания
     :param session: сессия с БД
@@ -21,10 +20,10 @@ async def get_task_by_worker(session: Session, id: str) -> ScheduleDaily:
     try:
         current_datetime = datetime.now()
         logger.info(f"Get task")
-        stmt = select(ScheduleDaily).\
-        where(ScheduleDaily.sch_month == current_datetime.month).\
-        where(ScheduleDaily.sch_day == current_datetime.day).\
-        where(ScheduleDaily.sch_hour == current_datetime.hour)
+        stmt = select(ScheduleDaily). \
+            where(ScheduleDaily.sch_month == current_datetime.month). \
+            where(ScheduleDaily.sch_day == current_datetime.day). \
+            where(ScheduleDaily.sch_hour == current_datetime.hour)
         print(current_datetime.month, current_datetime.day, current_datetime.hour)
         result = await session.execute(stmt)
         print(result.one())

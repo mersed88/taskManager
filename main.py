@@ -26,8 +26,9 @@ app.add_middleware(
 
 
 @app.on_event("startup")
-async def on_startup():
-    await init_db()
+def on_startup():
+    init_db()
+
 
 @app.get('/healthcheck')
 async def HealthCheck():
@@ -45,12 +46,13 @@ async def HealthCheck():
 #     return result
 
 
-@app.post('/GetTask', status_code=200, response_model=WorkerOut)
+@app.get('/GetTask', status_code=200, response_model=WorkerOut)
 async def get_task(worker: WorkerIn, session: Session = Depends(get_session)):
-    result = await get_task_by_worker(session=session, id=worker.id)
-    res_js = WorkerOut(pickle = str(result))
+    result = get_task_by_worker(session=session, id=worker.id)
+    res_js = WorkerOut(pickle=str(result))
     return res_js
     # JSONResponse(status_code=200, content=result)
+
 
 if __name__ == '__main__':
     uvicorn.run(app, host=str(host), port=int(port), debug=False)
