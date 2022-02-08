@@ -21,13 +21,15 @@ async def get_task_by_worker(session: Session, id: str) -> ScheduleDaily:
     try:
         current_datetime = datetime.now()
         logger.info(f"Get task")
-        stmt = select(ScheduleDaily.pickle_id).\
+        stmt = select(ScheduleDaily).\
         where(ScheduleDaily.sch_month == current_datetime.month).\
         where(ScheduleDaily.sch_day == current_datetime.day).\
         where(ScheduleDaily.sch_hour == current_datetime.hour)
         print(current_datetime.month, current_datetime.day, current_datetime.hour)
         result = await session.execute(stmt)
-        return result.first()
+        print(result.one())
+        # print(type(result))
+        return result.one()
 
     except Exception as e:
         logger.error(f"Failed get task \n {e}")
