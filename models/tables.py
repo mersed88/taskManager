@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from sqlalchemy import Column, Integer, String, event, LargeBinary
+from sqlalchemy import Column, Integer, String, event, LargeBinary, DDL
 from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -11,7 +11,7 @@ SCHEMA = schema_db
 Base = declarative_base()
 from sqlalchemy.schema import CreateSchema
 
-event.listen(Base.metadata, 'before_create', CreateSchema(SCHEMA))
+event.listen(Base.metadata, 'before_create', DDL(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}"))
 
 class Scenario(Base):
     __tablename__ = 'scenario'
