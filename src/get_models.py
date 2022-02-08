@@ -25,6 +25,7 @@ async def get_task_by_worker(session: Session, id: str) -> ScheduleDaily:
         where(ScheduleDaily.sch_month == current_datetime.month).\
         where(ScheduleDaily.sch_day == current_datetime.day).\
         where(ScheduleDaily.sch_hour == current_datetime.hour)
+        print(current_datetime.month, current_datetime.day, current_datetime.hour)
         result = await session.execute(stmt)
         return result.first()
 

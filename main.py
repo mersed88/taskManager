@@ -46,7 +46,7 @@ async def HealthCheck():
 
 
 @app.post('/GetTask', status_code=200, response_model=WorkerOut)
-async def get_task_by_worker(worker: WorkerIn, session: Session = Depends(get_session)):
+async def get_task(worker: WorkerIn, session: Session = Depends(get_session)):
     result = await get_task_by_worker(session=session, id=worker.id)
 
     return result
