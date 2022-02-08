@@ -10,7 +10,7 @@ from models.tables import ScheduleDaily
 from settings.config import logger
 
 
-async def get_task_by_worker(session: Session, id: Union[str, int]) -> ScheduleDaily:
+def get_task_by_worker(session: Session, id: Union[str, int]) -> ScheduleDaily:
     """
     Получение задания
     :param session: сессия с БД
