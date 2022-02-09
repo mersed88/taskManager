@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from sqlalchemy import Column, Integer, String, event, LargeBinary, DDL
+from sqlalchemy import Column, Integer, String, event, LargeBinary, DDL, Boolean, DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -36,3 +36,42 @@ class ScheduleDaily(Base):
     cur_quantity = Column(Integer)
     pickle_id = Column(Integer, ForeignKey(f'{SCHEMA}.scenario.id'))
     parent = relationship("Scenario", back_populates="children")
+
+
+class DeviceCookies(Base):
+    __tablename__ = 'devicecookies'
+    __table_args__ = {'schema': SCHEMA}
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    device_cookies = Column(LargeBinary)
+    last_update = Column(DateTime)
+    valid = Column(Boolean)
+
+
+
+class Device(Base):
+    __tablename__ = 'device'
+    __table_args__ = {'schema': SCHEMA}
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    device_type = Column(String)
+    screen_size = Column(String)
+    os = Column(String)
+    browser = Column(String)
+    device_cookies_id = Column(Integer, ForeignKey(f'{SCHEMA}.devicecookies.id'))
+
+
+
+class Profile(Base):
+    __tablename__ = 'profile'
+    __table_args__ = {'schema': SCHEMA}
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    nick_name = Column(String)
+    gender = Column(String)
+    age = Column(Integer)
+    region = Column(String)
+    device_id = Column(Integer, ForeignKey(f'{SCHEMA}.device.id'))
+    active = Column(Boolean)
+
+

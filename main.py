@@ -11,8 +11,10 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from dto.worker import WorkerIn, WorkerOut
+from dto.profile import ProfileIn, ProfileOut
 from settings.config import host, port
 from src.get_models import get_task_by_worker
+from src.get_models import get_profile_by_worker
 from src.init_db import init_db, get_session
 
 app = FastAPI()
@@ -42,6 +44,12 @@ async def get_task(worker: WorkerIn, session: Session = Depends(get_session)):
     res_js = WorkerOut(pickle=str(result))
     return res_js
     # JSONResponse(status_code=200, content=result)
+
+@app.get('/GetProfile', status_code=200, response_model=ProfileOut)
+async def get_task(profile: ProfileIn, session: Session = Depends(get_session)):
+    result = get_profile_by_worker(session=session, id=profile.id)
+    # res_js = ProfileOut(result)
+    return result
 
 
 if __name__ == '__main__':
