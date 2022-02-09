@@ -13,6 +13,9 @@ from settings.config import logger
 def get_task_by_worker(session: Session, id: Union[str, int]) -> ScheduleDaily:
     """
     Получение задания
+    1. находим задачу в текущем часе
+    2. увеличиваем количество выполненных
+    3. отдаем пикл
     :param session: сессия с БД
     :param id: номер воркера
     :return: Первое свободное задание
@@ -20,16 +23,24 @@ def get_task_by_worker(session: Session, id: Union[str, int]) -> ScheduleDaily:
     try:
         current_datetime = datetime.now()
         logger.info(f"Get task")
-        result = session.query(Scenario.pickle).\
-            join(ScheduleDaily).\
+
+        result_sch = session.query(ScheduleDaily.id, ScheduleDaily.pickle_id).\
             filter(ScheduleDaily.sch_month == current_datetime.month).\
             filter(ScheduleDaily.sch_month == current_datetime.month). \
             filter(ScheduleDaily.sch_day == current_datetime.day). \
-            filter(ScheduleDaily.sch_hour == current_datetime.hour)
-        print(current_datetime.month, current_datetime.day, current_datetime.hour)
-        print(result.one())
-        # print(type(result))
-        return result.one()
+            filter(ScheduleDaily.sch_hour == current_datetime.hour). \
+            filter(ScheduleDaily.plan_quantity > ScheduleDaily.cur_quantity)
+
+
+        session.query(ScheduleDaily). \
+            filter(ScheduleDaily.id == result_sch.one()[0] ). \
+            update({"cur_quantity": ScheduleDaily.cur_quantity+1}, synchronize_session='fetch')
+        session.commit()
+
+        result = session.query(Scenario.pickle).\
+            filter(Scenario.id == result_sch.one()[1])
+
+        return result.one()[0]
 
 
     except Exception as e:

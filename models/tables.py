@@ -32,5 +32,7 @@ class ScheduleDaily(Base):
     sch_month = Column(Integer)
     sch_day = Column(Integer)
     sch_hour = Column(Integer)
+    plan_quantity = Column(Integer)
+    cur_quantity = Column(Integer)
     pickle_id = Column(Integer, ForeignKey(f'{SCHEMA}.scenario.id'))
     parent = relationship("Scenario", back_populates="children")
