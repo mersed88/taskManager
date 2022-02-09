@@ -36,16 +36,6 @@ async def HealthCheck():
     return JSONResponse(status_code=200, content={})
 
 
-# @app.post('/GetEpkIdByPhone', status_code=200, response_model=UcpId)
-# async def get_epk_id_by_phone(phone: WorkerIn, session: Session = Depends(get_session)):
-#     result = await get_epk_by_phone(session=session, phone=phone.phone)
-#
-#     if not result:
-#         return UcpId(error_code="not_found")
-#
-#     return result
-
-
 @app.get('/GetTask', status_code=200, response_model=WorkerOut)
 async def get_task(worker: WorkerIn, session: Session = Depends(get_session)):
     result = get_task_by_worker(session=session, id=worker.id)
