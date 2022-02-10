@@ -99,7 +99,7 @@ def get_profile_by_worker(session: Session, id: Union[str, int]) -> Profile:
             filter(Device.id == result_profile.one()[1])
         print(result_device.one())
 
-        result_cookies = session.query(DeviceCookies.id, DeviceCookies.device_cookies, DeviceCookies.valid, DeviceCookies.last_update).\
+        result_cookies = session.query(DeviceCookies.id, DeviceCookies.device_cookies, DeviceCookies.is_valid, DeviceCookies.last_update).\
             filter(DeviceCookies.id == result_device.one()[5])
         print(result_cookies.one())
 

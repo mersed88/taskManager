@@ -30,7 +30,7 @@ class DeviceCookiesDto(BaseModel):
     id: typing.Optional[int]
     device_cookies: typing.Optional[bytes]
     last_update: typing.Optional[str]
-    valid: typing.Optional[bool]
+    is_valid: typing.Optional[bool]
 
 
 

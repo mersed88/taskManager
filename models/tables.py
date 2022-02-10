@@ -45,7 +45,7 @@ class DeviceCookies(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     device_cookies = Column(LargeBinary)
     last_update = Column(DateTime)
-    valid = Column(Boolean)
+    is_valid = Column(Boolean)
 
 
 
