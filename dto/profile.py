@@ -2,6 +2,7 @@
 
 import typing
 from pydantic import BaseModel
+import datetime
 
 
 class ProfileIn(BaseModel):
@@ -29,7 +30,7 @@ class DeviceCookiesDto(BaseModel):
 
     id: typing.Optional[int]
     device_cookies: typing.Optional[bytes]
-    last_update: typing.Optional[str]
+    last_update: typing.Optional[datetime.datetime]
     is_valid: typing.Optional[bool]
 
 
