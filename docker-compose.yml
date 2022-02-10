@@ -1,0 +1,13 @@
+version: '2'
+services:
+  main-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: main-service
+    ports:
+    - 8080:8080
+    - 9000:9000
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
