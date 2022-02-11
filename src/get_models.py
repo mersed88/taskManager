@@ -7,7 +7,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
 from models.tables import ScheduleDaily, Scenario, DeviceCookies, Profile, Device
-from dto.profile import ProfileOut
+from dto.profile import ProfileOut, ProfileDto,DeviceDto, DeviceCookiesDto
 from settings.config import logger
 
 
@@ -93,22 +93,23 @@ def get_profile_by_worker(session: Session, id: Union[str, int]) -> Profile:
 
         result_profile = session.query(Profile.id, Profile.device_id, Profile.nick_name, Profile.active, Profile.age, Profile.gender).\
             filter(Profile.active == False)
-        print(result_profile.one())
+        exec_profile = ProfileDto(id=result_profile.one()[0], device_id=result_profile.one()[1], nick_name=result_profile.one()[2], \
+                gender=result_profile.one()[5] , age=result_profile.one()[4]  ,active=result_profile.one()[3] )
 
         result_device = session.query(Device.id, Device.os, Device.browser, Device.device_type, Device.screen_size, Device.device_cookies_id).\
-            filter(Device.id == result_profile.one()[1])
+            filter(Device.id == exec_profile.id)
         print(result_device.one())
 
         result_cookies = session.query(DeviceCookies.id, DeviceCookies.device_cookies, DeviceCookies.is_valid, DeviceCookies.last_update).\
             filter(DeviceCookies.id == result_device.one()[5])
         print(result_cookies.one())
 
-        # session.query(Profile). \
-        #     filter(Profile.id == result_profile.one()[0]). \
-        #     update({"active": True}, synchronize_session='fetch')
-        # session.commit()
+        session.query(Profile). \
+            filter(Profile.id == exec_profile.id). \
+            update({"active": True}, synchronize_session='fetch')
+        session.commit()
 
-        result = ProfileOut(profile=result_profile.one(), device=result_device.one(), deviceCookies=result_cookies.one())
+        result = ProfileOut(profile=exec_profile, device=result_device.one(), deviceCookies=result_cookies.one())
 
         return result
 
