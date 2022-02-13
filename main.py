@@ -8,6 +8,7 @@ import uvicorn
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 
 from dto.worker import WorkerIn, WorkerOut
@@ -38,11 +39,11 @@ async def HealthCheck():
     return JSONResponse(status_code=200, content={})
 
 
-@app.get('/GetTask', status_code=200, response_model=WorkerOut)
+@app.get('/GetTask', status_code=200)
 async def get_task(worker: WorkerIn, session: Session = Depends(get_session)):
     result = get_task_by_worker(session=session, id=worker.id)
-    res_js = WorkerOut(pickle=str(result))
-    return res_js
+    res_js = WorkerOut(pickle=result)
+    return PlainTextResponse(res_js.pickle)
     # JSONResponse(status_code=200, content=result)
 
 @app.get('/GetProfile', status_code=200, response_model=ProfileOut)

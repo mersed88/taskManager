@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from models.tables import Base
 from settings.config import engine_string
 
-engine = create_engine(engine_string, echo=True)
+engine = create_engine(engine_string, echo=False)
 session = sessionmaker(bind=engine)()
 
 
