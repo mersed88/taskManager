@@ -21,4 +21,4 @@ class WorkerOut(BaseModel):
     "pickle": "1474513503099495002"
     }
     """
-    pickle: typing.Union[bytes]
+    pickle: typing.Optional[bytes]
