@@ -43,14 +43,23 @@ async def HealthCheck():
 async def get_task(worker: WorkerIn, session: Session = Depends(get_session)):
     result = get_task_by_worker(session=session, id=worker.id)
     res_js = WorkerOut(pickle=result)
-    return PlainTextResponse(res_js.pickle)
+    if result:
+        return PlainTextResponse(res_js.pickle)
+    else:
+        return JSONResponse(status_code=204, content=None)
+        # HTMLResponse(content=None, status_code=300)
+
     # JSONResponse(status_code=200, content=result)
 
 @app.get('/GetProfile', status_code=200, response_model=ProfileOut)
 async def get_task(profile: ProfileIn, session: Session = Depends(get_session)):
     result = get_profile_by_worker(session=session, id=profile.id)
     # res_js = ProfileOut(result)
-    return result
+    if result:
+        return result
+    else:
+        return JSONResponse(status_code=204, content=None)
+
 
 
 if __name__ == '__main__':

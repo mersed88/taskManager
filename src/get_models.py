@@ -11,6 +11,7 @@ from dto.profile import ProfileOut, ProfileDto,DeviceDto, DeviceCookiesDto
 from settings.config import logger
 
 
+
 def get_task_by_worker(session: Session, id: Union[str, int]) -> ScheduleDaily:
     """
     Получение задания
@@ -32,14 +33,20 @@ def get_task_by_worker(session: Session, id: Union[str, int]) -> ScheduleDaily:
             filter(ScheduleDaily.sch_hour == current_datetime.hour). \
             filter(ScheduleDaily.plan_quantity > ScheduleDaily.cur_quantity)
 
+        sched_id = result_sch.first()[0]
+        pick_id = result_sch.first()[1]
+        # print('id sched ---', sched_id)
+        # print('id sched ---', pick_id)
 
         session.query(ScheduleDaily). \
-            filter(ScheduleDaily.id == result_sch.one()[0]). \
+            filter(ScheduleDaily.id == sched_id). \
             update({"cur_quantity": ScheduleDaily.cur_quantity+1}, synchronize_session='fetch')
         session.commit()
 
         result = session.query(Scenario.pickle).\
-            filter(Scenario.id == result_sch.one()[1])
+            filter(Scenario.id == pick_id)
+
+        # print('----------', sched_id)
 
         return result.one()[0]
 
